@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-skiff.fullname" . }}
+  labels:
+    {{- include "k8s-skiff.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "k8s-skiff.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "k8s-skiff.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "k8s-skiff.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - image: alpine/git
+          name: git-init
+          args:
+            - clone
+            - -b
+            - $(GIT_BRANCH)
+            - $(GIT_URL)
+            - .
+          env:
+            - name: GIT_BRANCH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "k8s-skiff.fullname" . }}
+                  key: git_branch
+            - name: GIT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "k8s-skiff.fullname" . }}
+                  key: git_url
+          volumeMounts:
+            - name: web-data
+              mountPath: /git
+        - image: alpine/git
+          name: git-pull
+          restartPolicy: Always
+          env:
+            - name: UPDATE_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "k8s-skiff.fullname" . }}
+                  key: update_interval
+          command:
+            - sh
+            - -c
+            - while true; do git pull; sleep $(UPDATE_INTERVAL); done
+          volumeMounts:
+            - name: web-data
+              mountPath: /git
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: web-data
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+              subPath: config
+            - name: web-data
+              mountPath: /site
+              readOnly: true
+      volumes:
+        - name: web-data
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
