@@ -147,6 +147,10 @@ tolerations: []
 
 affinity: {}
 
+volumes: []
+
+volumeMounts: []
+
 config:
   update_interval: 10
   git_branch: main
