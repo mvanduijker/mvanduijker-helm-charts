@@ -12,14 +12,14 @@ Use [this template](https://github.com/mvanduijker/k8s-skiff-site-template) as a
 
 Add helm repo
 
-```bash
+```console
 helm repo add mvanduijker https://mvanduijker.github.io/mvanduijker-helm-charts
 helm repo update
 ```
 
 Example deployment to your k8s cluster with traefik as nginx controller
 
-```bash
+```console
 helm upgrade --install --create-namespace -n hello-world hello-world mvanduijker/k8s-skiff \
   --set 'secret.git_url=https://github.com/mvanduijker/k8s-skiff-site-template' \
   --set "ingress.enabled=true" \
