@@ -3,6 +3,21 @@ entries:
   k8s-skiff:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-11-13T20:39:04.764790647Z"
+    description: Variant of kamal-skiff for k8s. Deploy auto updating static site
+      powered by nginx with data from git repo.
+    digest: d41f05534b5cafdcb047831057cfbd6c5a5d69bf76a3dacdc3c1b1eceb05e121
+    home: https://github.com/mvanduijker/k8s-skiff-site-template
+    maintainers:
+    - email: mark@duyker.nl
+      name: Mark van Duijker
+    name: k8s-skiff
+    type: application
+    urls:
+    - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/k8s-skiff-0.1.2/k8s-skiff-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-11-12T21:26:03.07716514Z"
     description: Variant of kamal-skiff for k8s. Deploy auto updating static site
       powered by nginx with data from git repo.
@@ -26,4 +41,4 @@ entries:
     urls:
     - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/k8s-skiff-0.1.0/k8s-skiff-0.1.0.tgz
     version: 0.1.0
-generated: "2025-11-12T21:26:03.077183184Z"
+generated: "2025-11-13T20:39:04.764804713Z"
