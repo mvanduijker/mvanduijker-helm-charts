@@ -38,6 +38,7 @@ Table of basic configuration. Want to know more print the values with
 ```
 
 | Parameter              | Description                                         |  Default                                                 |
+| ---------------------- | ---------------------------- | ----------------------------------------------- |
 | config.update_interval | Interval to retrieve the website data from git repo |   10                                                     |
 | config.git_branch      | The git branch to retrieve the website data from    |   main                                                   |
 | secret.git_url         | The git url to retrieve the website data from       | <https://github.com/mvanduijker/k8s-skiff-site-template> |
