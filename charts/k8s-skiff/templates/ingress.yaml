@@ -13,6 +13,12 @@ spec:
   {{- with .Values.ingress.className }}
   ingressClassName: {{ . }}
   {{- end }}
+  {{- if and (empty .Values.ingress.tls) .Values.config.secretName .Values.config.host }}
+  tls:
+    - hosts:
+        - {{ .Values.config.host | quote }}
+      secretName: {{ .Values.config.secretName }}
+  {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
@@ -24,6 +30,18 @@ spec:
     {{- end }}
   {{- end }}
   rules:
+    {{- if and (empty .Values.ingress.hosts) .Values.config.host }}
+    - host: {{ .Values.config.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "k8s-skiff.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+    {{- end }}
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:

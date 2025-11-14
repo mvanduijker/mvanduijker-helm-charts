@@ -22,9 +22,9 @@ Example deployment to your k8s cluster with traefik as nginx controller
 ```console
 helm upgrade --install --create-namespace -n hello-world hello-world mvanduijker/k8s-skiff \
   --set 'secret.git_url=https://github.com/mvanduijker/k8s-skiff-site-template' \
+  --set 'config.host=hello-world.duyker.nl' \
+  --set 'config.secretName=hello-world-k8s-skiff-tls' \
   --set "ingress.enabled=true" \
-  --set-json 'ingress.hosts=[{"host": "hello-world.duyker.nl", "paths": [{"path": "/", "pathType": "ImplementationSpecific"}]}]' \
-  --set-json 'ingress.tls=[{"secretName": "hello-world-k8s-skiff-tls", "hosts": ["hello-world.duyker.nl"]}]' \
   --set 'ingress.className=traefik' \
   --set 'ingress.annotations.cert-manager\.io/cluster\-issuer=letsencrypt-prod'
 ```
