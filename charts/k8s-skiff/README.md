@@ -41,4 +41,6 @@ Table of basic configuration. Want to know more print the values with
 | ---------------------- | ---------------------------- | ----------------------------------------------- |
 | config.update_interval | Interval to retrieve the website data from git repo |   10                                                     |
 | config.git_branch      | The git branch to retrieve the website data from    |   main                                                   |
+| config.host            | Host to accept traffic on, for advanced stuff override ingress.hosts and this will be ignored. |  chart-example.local |
+| config.secretName      | Name for tls cert, for advanced stuff override ingress.tls and this will be ignored. | chart-example-tls |
 | secret.git_url         | The git url to retrieve the website data from       | <https://github.com/mvanduijker/k8s-skiff-site-template> |
