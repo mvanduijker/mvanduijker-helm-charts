@@ -46,12 +46,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "k8s-skiff.fullname" . }}
-                  key: git_branch
+                  key: gitBranch
             - name: GIT_URL
               valueFrom:
                 secretKeyRef:
                   name: {{ include "k8s-skiff.fullname" . }}
-                  key: git_url
+                  key: gitUrl
           volumeMounts:
             - name: web-data
               mountPath: /git
@@ -63,7 +63,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "k8s-skiff.fullname" . }}
-                  key: update_interval
+                  key: updateInterval
           command:
             - sh
             - -c

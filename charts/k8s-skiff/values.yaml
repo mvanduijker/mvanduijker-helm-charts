@@ -152,9 +152,9 @@ volumes: []
 volumeMounts: []
 
 config:
-  update_interval: 10
-  git_branch: main
+  updateInterval: 10
+  gitBranch: main
   host: chart-example.local
   secretName: chart-example-tls
 secret:
-  git_url: https://github.com/mvanduijker/k8s-skiff-site-template
+  gitUrl: https://github.com/mvanduijker/k8s-skiff-site-template

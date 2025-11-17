@@ -21,7 +21,7 @@ Example deployment to your k8s cluster with traefik as nginx controller
 
 ```console
 helm upgrade --install --create-namespace -n hello-world hello-world mvanduijker/k8s-skiff \
-  --set 'secret.git_url=https://github.com/mvanduijker/k8s-skiff-site-template' \
+  --set 'secret.gitUrl=https://github.com/mvanduijker/k8s-skiff-site-template' \
   --set 'config.host=hello-world.duyker.nl' \
   --set 'config.secretName=hello-world-k8s-skiff-tls' \
   --set "ingress.enabled=true" \
@@ -39,8 +39,8 @@ Table of basic configuration. Want to know more print the values with
 
 | Parameter              | Description                                         |  Default                                                 |
 | ---------------------- | ---------------------------- | ----------------------------------------------- |
-| config.update_interval | Interval to retrieve the website data from git repo |   10                                                     |
-| config.git_branch      | The git branch to retrieve the website data from    |   main                                                   |
+| config.updateInterval | Interval to retrieve the website data from git repo |   10                                                     |
+| config.gitBranch      | The git branch to retrieve the website data from    |   main                                                   |
 | config.host            | Host to accept traffic on, for advanced stuff override ingress.hosts and this will be ignored. |  chart-example.local |
 | config.secretName      | Name for tls cert, for advanced stuff override ingress.tls and this will be ignored. | chart-example-tls |
-| secret.git_url         | The git url to retrieve the website data from       | <https://github.com/mvanduijker/k8s-skiff-site-template> |
+| secret.gitUrl         | The git url to retrieve the website data from       | <https://github.com/mvanduijker/k8s-skiff-site-template> |
