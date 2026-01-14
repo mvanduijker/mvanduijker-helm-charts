@@ -1,0 +1,4 @@
+{{- range .Values.extraObjects }}
+---
+{{- include "mvanduijker.tplvalues.render" (dict "value" . "context" $) }}
+{{- end }}

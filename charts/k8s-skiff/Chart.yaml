@@ -2,9 +2,9 @@ apiVersion: v2
 name: k8s-skiff
 description: Variant of kamal-skiff for k8s. Deploy auto updating static site powered by nginx with data from git repo.
 type: application
-version: 1.0.0
+version: 2.0.0
 home: https://github.com/mvanduijker/k8s-skiff-site-template
 maintainers:
   - name: Mark van Duijker
     email: mark@duyker.nl
-appVersion: "1.0.0"
+appVersion: "2.0.0"

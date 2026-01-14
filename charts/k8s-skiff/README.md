@@ -22,8 +22,21 @@ Example deployment to your k8s cluster with traefik as nginx controller
 ```console
 helm upgrade --install --create-namespace -n hello-world hello-world mvanduijker/k8s-skiff \
   --set 'secret.gitUrl=https://github.com/mvanduijker/k8s-skiff-site-template' \
-  --set 'config.host=hello-world.duyker.nl' \
-  --set 'config.secretName=hello-world-k8s-skiff-tls' \
+  --set 'host=hello-world.duyker.nl' \
+  --set 'secretName=hello-world-k8s-skiff-tls' \
+  --set "ingress.enabled=true" \
+  --set 'ingress.className=traefik' \
+  --set 'ingress.annotations.cert-manager\.io/cluster\-issuer=letsencrypt-prod'
+```
+
+When you bake in the site in your docker container, this also is possible and will disable the polling.
+
+```console
+helm upgrade --install --create-namespace -n hello-world hello-world mvanduijker/k8s-skiff \
+  --set 'gitPollEnabled=false' \
+  --set 'image.repository=mvanduijker/k8s-skiff-site-template' \
+  --set 'host=hello-world.duyker.nl' \
+  --set 'secretName=hello-world-k8s-skiff-tls' \
   --set "ingress.enabled=true" \
   --set 'ingress.className=traefik' \
   --set 'ingress.annotations.cert-manager\.io/cluster\-issuer=letsencrypt-prod'
@@ -41,6 +54,6 @@ Table of basic configuration. Want to know more print the values with
 | ---------------------- | ---------------------------- | ----------------------------------------------- |
 | config.updateInterval | Interval to retrieve the website data from git repo |   10                                                     |
 | config.gitBranch      | The git branch to retrieve the website data from    |   main                                                   |
-| config.host            | Host to accept traffic on, for advanced stuff override ingress.hosts and this will be ignored. |  chart-example.local |
-| config.secretName      | Name for tls cert, for advanced stuff override ingress.tls and this will be ignored. | chart-example-tls |
+| host            | Host to accept traffic on, for advanced stuff override ingress.hosts and this will be ignored. |  chart-example.local |
+| secretName      | Name for tls cert, for advanced stuff override ingress.tls and this will be ignored. | chart-example-tls |
 | secret.gitUrl         | The git url to retrieve the website data from       | <https://github.com/mvanduijker/k8s-skiff-site-template> |

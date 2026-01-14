@@ -60,3 +60,15 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Render a value that contains template perhaps (https://github.com/CloudPirates-io/helm-charts/blob/main/charts/common/templates/_helpers.tpl#L222)
+*/}}
+{{- define "mvanduijker.tplvalues.render" -}}
+  {{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
+  {{- if contains "{{" (toString $value) }}
+    {{- tpl $value .context }}
+  {{- else }}
+    {{- $value }}
+  {{- end }}
+{{- end -}}

@@ -4,6 +4,10 @@ metadata:
   name: {{ include "k8s-skiff.fullname" . }}
   labels:
     {{- include "k8s-skiff.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -32,6 +36,7 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.config.gitPollEnabled }}
       initContainers:
         - image: alpine/git
           name: git-init
@@ -71,6 +76,7 @@ spec:
           volumeMounts:
             - name: web-data
               mountPath: /git
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
@@ -95,6 +101,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if .Values.config.gitPollEnabled }}
           volumeMounts:
             - name: web-data
               mountPath: /etc/nginx/conf.d
@@ -103,9 +110,12 @@ spec:
             - name: web-data
               mountPath: /site
               readOnly: true
+          {{- end }}
+      {{- if .Values.config.gitPollEnabled }}
       volumes:
         - name: web-data
           emptyDir: {}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
