@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "goatcounter.fullname" . }}
+  labels:
+    {{- include "goatcounter.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "goatcounter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "goatcounter.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "goatcounter.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            {{- $hasDbEnv := false }}
+            {{- range .Values.extraEnv }}
+              {{- if eq .name "GOATCOUNTER_DB" }}
+                {{- $hasDbEnv = true }}
+              {{- end }}
+            {{- end }}
+            {{- if not $hasDbEnv }}
+            - name: GOATCOUNTER_DB
+              value: "sqlite3:///home/goatcounter/goatcounter-data/goatcounter.sqlite3"
+            {{- end }}
+            - name: GOATCOUNTER_AUTOMIGRATE
+              value: "true"
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value | quote }}
+              {{- else if .valueFrom }}
+              valueFrom:
+                {{- toYaml .valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+          {{- if or .Values.storage.enabled .Values.extraVolumes }}
+          volumeMounts:
+            {{- if .Values.storage.enabled }}
+            - name: goatcounter-data
+              mountPath: /home/goatcounter/goatcounter-data
+            {{- end }}
+            {{- range .Values.extraVolumeMounts }}
+            - {{- toYaml . | nindent 14 }}
+            {{- end }}
+          {{- end }}
+      {{- if or .Values.storage.enabled .Values.extraVolumes }}
+      volumes:
+        {{- if .Values.storage.enabled }}
+        - name: goatcounter-data
+          {{- if .Values.storage.existingClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.existingClaim }}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ include "goatcounter.fullname" . }}-data
+          {{- end }}
+        {{- end }}
+        {{- range .Values.extraVolumes }}
+        - {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

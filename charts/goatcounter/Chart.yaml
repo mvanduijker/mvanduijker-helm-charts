@@ -1,0 +1,11 @@
+apiVersion: v2
+name: goatcounter
+description: Easy web analytics platform. No tracking of personal data. Self-hosted alternative to Google Analytics.
+type: application
+version: 0.1.0
+appVersion: "latest"
+home: https://github.com/arp242/goatcounter
+maintainers:
+  - name: Mark van Duijker
+    email: mark@duyker.nl
+dependencies: []
