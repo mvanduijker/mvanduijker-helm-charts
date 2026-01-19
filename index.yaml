@@ -1,5 +1,21 @@
 apiVersion: v1
 entries:
+  goatcounter:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-19T21:56:17.749357004Z"
+    description: Easy web analytics platform. No tracking of personal data. Self-hosted
+      alternative to Google Analytics.
+    digest: 6ee350ae9b23be5e6e9929371a39ecdbd9da007ad56bdec65ab29c1baba8101e
+    home: https://github.com/arp242/goatcounter
+    maintainers:
+    - email: mark@duyker.nl
+      name: Mark van Duijker
+    name: goatcounter
+    type: application
+    urls:
+    - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/goatcounter-0.1.0/goatcounter-0.1.0.tgz
+    version: 0.1.0
   k8s-skiff:
   - apiVersion: v2
     appVersion: 2.0.0
@@ -86,4 +102,4 @@ entries:
     urls:
     - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/k8s-skiff-0.1.0/k8s-skiff-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-14T19:52:40.629620242Z"
+generated: "2026-01-19T21:56:17.749378575Z"
