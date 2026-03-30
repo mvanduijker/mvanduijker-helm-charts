@@ -1,0 +1,11 @@
+apiVersion: v2
+name: frps
+description: Fast reverse proxy server (frps) - the server component of frp
+type: application
+version: 0.1.0
+appVersion: "0.62.1"
+home: https://github.com/fatedier/frp
+maintainers:
+  - name: Mark van Duijker
+    email: mark@duyker.nl
+dependencies: []

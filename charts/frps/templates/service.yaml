@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "frps.fullname" . }}
+  labels:
+    {{- include "frps.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "frps.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "frps.fullname" . }}-bind
+  labels:
+    {{- include "frps.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bind.service.type }}
+  ports:
+    - port: {{ .Values.bind.service.port }}
+      targetPort: bind
+      protocol: TCP
+      name: bind
+  selector:
+    {{- include "frps.selectorLabels" . | nindent 4 }}

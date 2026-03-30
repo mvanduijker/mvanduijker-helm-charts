@@ -1,0 +1,86 @@
+replicaCount: 1
+
+image:
+  repository: snowdreamtech/frps
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 1000
+
+securityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+deploymentAnnotations: {}
+
+auth:
+  token: ""
+  # Use an existing secret instead of creating one
+  # The secret must contain a key "auth-token"
+  existingSecret: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+bind:
+  service:
+    type: LoadBalancer
+    port: 7000
+
+ingress:
+  enabled: false
+  className: "traefik"
+  annotations: {}
+  hosts:
+    - host: "*.example.com"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+    # - secretName: frps-wildcard-tls
+    #   hosts:
+    #     - "*.example.com"
+
+# frps configuration in TOML format
+# see https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml
+config: |
+  bindPort = 7000
+  vhostHTTPPort = 80
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  tcpSocket:
+    port: http
+readinessProbe:
+  tcpSocket:
+    port: http
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraObjects: []
