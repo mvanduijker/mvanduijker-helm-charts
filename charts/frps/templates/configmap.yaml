@@ -8,5 +8,5 @@ data:
   frps.toml: |
     {{- .Values.config | nindent 4 }}
     {{- if or .Values.auth.token .Values.auth.existingSecret }}
-    auth.token = {{ "{{ .Envs.FRP_AUTH_TOKEN }}" }}
+    auth.token = "{{ "{{ .Envs.FRP_AUTH_TOKEN }}" }}"
     {{- end }}
