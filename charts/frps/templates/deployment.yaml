@@ -51,9 +51,6 @@ spec:
                   name: {{ include "frps.authSecretName" . }}
                   key: auth-token
           {{- end }}
-          args:
-            - -c
-            - /etc/frps/frps.toml
           ports:
             - name: bind
               containerPort: 7000
@@ -75,7 +72,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: config
-              mountPath: /etc/frps
+              mountPath: /etc/frp
               readOnly: true
       volumes:
         - name: config
