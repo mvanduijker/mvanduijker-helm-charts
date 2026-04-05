@@ -2,8 +2,8 @@ apiVersion: v2
 name: frps
 description: Fast reverse proxy server (frps) - the server component of frp
 type: application
-version: 1.0.0
-appVersion: "0.62.1"
+version: 1.1.0
+appVersion: "v0.68.0"
 home: https://github.com/fatedier/frp
 maintainers:
   - name: Mark van Duijker

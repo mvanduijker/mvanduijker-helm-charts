@@ -85,10 +85,10 @@ resources: {}
 
 livenessProbe:
   tcpSocket:
-    port: http
+    port: bind
 readinessProbe:
   tcpSocket:
-    port: http
+    port: bind
 
 nodeSelector: {}
 
