@@ -4,6 +4,10 @@ metadata:
   name: {{ include "frps.fullname" . }}
   labels:
     {{- include "frps.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -20,6 +24,10 @@ metadata:
   name: {{ include "frps.fullname" . }}-bind
   labels:
     {{- include "frps.labels" . | nindent 4 }}
+  {{- with .Values.bind.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.bind.service.type }}
   ports:

@@ -8,5 +8,8 @@ data:
   frps.toml: |
     {{- .Values.config | nindent 4 }}
     {{- if or .Values.auth.token .Values.auth.existingSecret }}
+    {{- if contains "auth.token" .Values.config }}
+    {{- fail "Do not set auth.token in .Values.config when using .Values.auth.token or .Values.auth.existingSecret. The chart injects auth configuration automatically." }}
+    {{- end }}
     auth.token = "{{ "{{ .Envs.FRP_AUTH_TOKEN }}" }}"
     {{- end }}
