@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: snowdreamtech/frps
-  tag: "latest"
+  repository: fatedier/frps
+  tag: ""
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -11,19 +11,25 @@ fullnameOverride: ""
 
 serviceAccount:
   create: true
-  automount: true
+  automount: false
   annotations: {}
   name: ""
 
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 1000
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
 
-securityContext: {}
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
 
 deploymentAnnotations: {}
 
@@ -35,16 +41,18 @@ auth:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
+  annotations: {}
 
 bind:
   service:
     type: LoadBalancer
     port: 7000
+    annotations: {}
 
 ingress:
   enabled: false
-  className: "traefik"
+  className: ""
   annotations: {}
   hosts:
     - host: "*.example.com"
@@ -56,11 +64,15 @@ ingress:
     #   hosts:
     #     - "*.example.com"
 
+networkPolicy:
+  enabled: false
+
 # frps configuration in TOML format
 # see https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml
+# IMPORTANT: bindPort must match bind.service.port, vhostHTTPPort must match service.port
 config: |
   bindPort = 7000
-  vhostHTTPPort = 80
+  vhostHTTPPort = 8080
   subDomainHost = "example.com"
 
 resources: {}

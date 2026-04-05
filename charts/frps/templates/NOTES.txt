@@ -1,0 +1,32 @@
+frps has been deployed successfully!
+
+1. Get the bind service address (where frpc clients connect):
+
+   kubectl get svc {{ include "frps.fullname" . }}-bind --namespace {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+
+2. Your ingress is configured for:
+{{- range .Values.ingress.hosts }}
+   - {{ .host }}
+{{- end }}
+{{- else }}
+
+2. Port-forward the HTTP vhost service for local testing:
+
+   kubectl port-forward svc/{{ include "frps.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} --namespace {{ .Release.Namespace }}
+{{- end }}
+
+3. Example frpc.toml to connect:
+
+   serverAddr = "<BIND_SERVICE_EXTERNAL_IP>"
+   serverPort = {{ .Values.bind.service.port }}
+{{- if or .Values.auth.token .Values.auth.existingSecret }}
+   auth.token = "<YOUR_AUTH_TOKEN>"
+{{- end }}
+
+   [[proxies]]
+   name = "my-app"
+   type = "http"
+   localPort = 3000
+   subdomain = "myapp"

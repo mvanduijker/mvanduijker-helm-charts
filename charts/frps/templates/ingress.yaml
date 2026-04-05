@@ -1,8 +1,9 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "frps.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
-{{- if and .Values.ingress.className (not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class")) }}
-{{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className -}}
+{{- $annotations := deepCopy (.Values.ingress.annotations | default dict) -}}
+{{- if and .Values.ingress.className (not (hasKey $annotations "kubernetes.io/ingress.class")) -}}
+{{- $_ := set $annotations "kubernetes.io/ingress.class" .Values.ingress.className -}}
 {{- end }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -10,7 +11,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "frps.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with $annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -29,11 +30,7 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ .path }}
-            {{- if and .pathType (not (eq .pathType "Prefix")) }}
-            pathType: {{ .pathType }}
-            {{- else }}
-            pathType: Prefix
-            {{- end }}
+            pathType: {{ .pathType | default "Prefix" }}
             backend:
               service:
                 name: {{ $fullName }}
