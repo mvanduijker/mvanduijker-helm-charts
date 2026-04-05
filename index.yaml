@@ -3,6 +3,20 @@ entries:
   frps:
   - apiVersion: v2
     appVersion: 0.62.1
+    created: "2026-04-05T19:05:30.94159826Z"
+    description: Fast reverse proxy server (frps) - the server component of frp
+    digest: 787e4c180c81d61df2f108ec81b6b2715d18d31f94a7de1f8cd4de4902b80da6
+    home: https://github.com/fatedier/frp
+    maintainers:
+    - email: mark@duyker.nl
+      name: Mark van Duijker
+    name: frps
+    type: application
+    urls:
+    - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/frps-1.0.0/frps-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 0.62.1
     created: "2026-03-31T18:33:36.00218349Z"
     description: Fast reverse proxy server (frps) - the server component of frp
     digest: 321fded3891af4b0ec5d5ba2d812566aaed1df5f6118cd4f89ecdfe9681bb5b3
@@ -145,4 +159,4 @@ entries:
     urls:
     - https://github.com/mvanduijker/mvanduijker-helm-charts/releases/download/k8s-skiff-0.1.0/k8s-skiff-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-31T18:33:36.002204118Z"
+generated: "2026-04-05T19:05:30.941620542Z"
