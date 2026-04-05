@@ -61,6 +61,7 @@ ingress:
 config: |
   bindPort = 7000
   vhostHTTPPort = 80
+  subDomainHost = "example.com"
 
 resources: {}
   # limits:
